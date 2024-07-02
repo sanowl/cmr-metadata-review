@@ -12,12 +12,11 @@ governing permissions and limitations under the License.
 '''
 
 import json
-import requests
 import re
 from Result import *
 from xmlParser import XmlListConfig
-from xmlParser import XmlDictConfig
 from xml.etree import ElementTree
+from security import safe_requests
 
 granuleUrl = "https://cmr.earthdata.nasa.gov/search/granules?page_size=50&page_num={}"
 granuleMetaUrl = "https://cmr.earthdata.nasa.gov/search/granules.echo10?page_size=50&page_num={}"
@@ -47,7 +46,7 @@ def _searchResult(url, limit, **kwargs):
     # Format the url with customized parameters
     for k, v in kwargs.items():
         url += "&{}={}".format(k, v)
-    result = [requests.get(url.format(pagenum), headers=headers).content
+    result = [safe_requests.get(url.format(pagenum), headers=headers).content
               for pagenum in xrange(1, (limit - 1) / 50 + 2)]
     # for res in result:
     #     for ref in re.findall("<reference>(.*?)</reference>", res):
@@ -67,7 +66,7 @@ def searchGranule(limit=100,  **kwargs):
     metaUrl = granuleMetaUrl
     for k, v in kwargs.items():
         metaUrl += "&{}={}".format(k, v)
-    metaResult = [requests.get(metaUrl.format(pagenum), headers=headers).content
+    metaResult = [safe_requests.get(metaUrl.format(pagenum), headers=headers).content
                   for pagenum in xrange(1, (limit - 1) / 50 + 2)]
 
     # The first can be the error msgs
@@ -94,7 +93,7 @@ def searchCollection(limit=100, **kwargs):
     metaUrl = collectionMetaUrl
     for k, v in kwargs.items():
         metaUrl += "&{}={}".format(k, v)
-    metaResult = [requests.get(metaUrl.format(pagenum), headers=headers)
+    metaResult = [safe_requests.get(metaUrl.format(pagenum), headers=headers)
                   for pagenum in xrange(1, (limit - 1) / 50 + 2)]
 
     try:

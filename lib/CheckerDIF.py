@@ -1,7 +1,5 @@
 import datetime
 import re
-import urllib2
-import requests
 
 from parse.parseInstrument import parseInstrument
 from parse.parsePlatform import parsePlatform
@@ -13,10 +11,10 @@ from parse.parseLocations import parseLocations
 from parse.parseHori import parseHori
 from parse.parseVerti import parseVerti
 from parse.parseRange import parseRange
-from urllib2 import Request, urlopen, URLError, HTTPError
 
 from bs4 import BeautifulSoup
 from datetime import *
+from security import safe_requests
 
 class checkerRules():
 
@@ -39,7 +37,7 @@ class checkerRules():
 
     def broken_url(self,val):
         if (val != None):
-            r = requests.get(val, allow_redirects=False)
+            r = safe_requests.get(val, allow_redirects=False)
             return r.status_code
         else:
             return 404
