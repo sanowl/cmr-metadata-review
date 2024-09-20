@@ -32,7 +32,7 @@ class LXMLTreeBuilderForXML(TreeBuilder):
     def default_parser(self):
         # This can either return a parser object or a class, which
         # will be instantiated with default arguments.
-        return etree.XMLParser(target=self, strip_cdata=False, recover=True)
+        return etree.XMLParser(target=self, strip_cdata=False, recover=True, resolve_entities=False)
 
     def __init__(self, parser=None, empty_element_tags=None):
         if empty_element_tags is not None:
