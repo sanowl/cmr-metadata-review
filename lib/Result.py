@@ -12,8 +12,8 @@ governing permissions and limitations under the License.
 '''
 
 import re
-import requests
 import shutil
+from security import safe_requests
 
 class Result(dict):
     """
@@ -31,7 +31,7 @@ class Result(dict):
         # Downloadable url does not exist
         if not url:
             return None
-        r = requests.get(url, stream=True)
+        r = safe_requests.get(url, stream=True)
         r.raw.decode_content = True
         with open(destpath + "/" + self._downloadname.replace('/', ''), 'wb') as f:
             shutil.copyfileobj(r.raw, f)
